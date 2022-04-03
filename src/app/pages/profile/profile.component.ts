@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Role } from 'src/app/models/role.enum';
+import { User } from 'src/app/models/user.model';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -7,9 +12,33 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+  currentUser: User = new User();
+  errorMessage: string = '';
+
+  constructor(private userService: UserService,
+              private authenticationService: AuthenticationService,
+              private router: Router) { }
 
   ngOnInit(): void {
+    this.authenticationService.currentUser.subscribe(
+      data => {
+        this.currentUser = data;
+      }
+    )
+  }
+
+  changeRole() {
+    const newRole = this.currentUser.role === Role.USER ? Role.ADMIN : Role.USER;
+    this.userService.changeRole(newRole).subscribe(
+      () => {
+        this.authenticationService.logOut();
+        this.router.navigate(['/login']);
+      },
+      error => {
+        this.errorMessage = 'Unexpected error occurred';
+        console.log('ProfileComponent:changeRole:error=', error);
+      }
+    )
   }
 
 }
