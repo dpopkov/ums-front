@@ -39,7 +39,7 @@ export class AuthenticationService {
     );
   }
 
-  private setSessionUser(user: User) {
+  setSessionUser(user: User) {
     localStorage.setItem('currentUser', JSON.stringify(user));
     this.currentUserSubject.next(user);
   }
@@ -53,7 +53,7 @@ export class AuthenticationService {
     this.currentUserSubject.next(new User());
   }
 
-  refreshToken() {
+  refreshToken(): Observable<any> {
     return this.http.post(this.API_URL + '/refresh-token?token=' + this.currentUserValue?.refreshTokenId, {});
   }
 }

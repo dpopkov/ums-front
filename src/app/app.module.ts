@@ -13,6 +13,7 @@ import { DetailComponent } from './pages/detail/detail.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 import { FormsModule } from '@angular/forms';
+import {authInterceptorProviders} from "./interceptors/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
